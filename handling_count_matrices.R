@@ -1,5 +1,8 @@
-("smDsx_Male_Brain_S97",
-"smDsx_Male_Brain_S98",
+##redoing names for large table
+
+data.large<-read.table(file.choose(),header=T)
+
+colnames(data.large)<-c("gene","smDsx_Male_Brain_S97","smDsx_Male_Brain_S98",
 "smDsx_Male_Brain_S99",
 "smDsx_Male_Brain_S100",
 "smDsx_Male_Brain_S101",
