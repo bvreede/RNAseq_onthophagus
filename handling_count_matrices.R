@@ -2,6 +2,7 @@
 
 data.large<-read.table(file.choose(),header=T)
 
+#these are the column names for the large dataset
 colnames(data.large)<-c("gene","smDsx_Male_Brain_S97","smDsx_Male_Brain_S98",
 "smDsx_Male_Brain_S99",
 "smDsx_Male_Brain_S100",
@@ -57,15 +58,20 @@ colnames(data.large)<-c("gene","smDsx_Male_Brain_S97","smDsx_Male_Brain_S98",
 "smCntl_Male_Gen_S143",
 "smCntl_Male_Gen_S144")
 
+#import bioclite and deseq2
 source("https://bioconductor.org/biocLite.R")
 biocLite("DESeq2")
 
-data.large<-read.table(file.choose(),header=T)
-
+#merging two datasets: large data and small dataset
 data.merge<-merge(data.large,data,by="ENSEMBL_ID")
+
+#adding row names instead of numbered rows: the gene/ensembl Id will be the row name
 rownames(data.merge)<-data.merge$ENSEMBL_ID
+
+#select dataset to remove the first column (this has been used as row names already so now obsolete)
 data.merge<-data.merge[,2:145]
 
+#setting up which comparisons are going to be made
 x<-colnames(data.large)
 y<-colnames(data)
 both.names<-as.vector(c(x[2:97],y[2:49]))
@@ -77,6 +83,7 @@ as.vector(
 c(rep("Brain",6),rep("TH",6),rep("HH",6),rep("Gen",6),rep("Brain",6),rep("TH",6),rep("HH",6),rep("Gen",6),rep("Brain",6),rep("TH",6),rep("HH",6),rep("Gen",6),rep("Brain",6),rep("TH",6),rep("HH",6),rep("Gen",6),rep("Brain",12),rep("TH",12),rep("HH",12),rep("Gen",12))
 )
 
+#setting up metadata
 metadata<-cbind(both.names,both.treatment,both.size,both.sex,both.tissue)
 coldata<-metadata
 colnames(coldata)<-c("Sample","Treatment","Size","Sex","Tissue")
@@ -84,10 +91,12 @@ rownames(coldata)<-as.vector(c(x[2:97],y[2:49]))
 coldata<-coldata[,2:5]
 coldata<-as.data.frame(coldata)
 
+#"guts of each comparison"
 ddsFullCountTable<-DESeqDataSetFromMatrix(
 countData=data.merge,
 colData=coldata,
 design= ~Treatment)
+
 
 dds<-ddsFullCountTable
 dds <- dds[ rowSums(counts(dds)) > 1, ]
