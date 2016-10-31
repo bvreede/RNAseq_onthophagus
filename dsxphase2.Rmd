@@ -1,0 +1,87 @@
+---
+title: "DSX project - Phase 2 DESeq analysis"
+author: "Barbara Vreede"
+date: "October 27, 2016"
+output: pdf_document
+---
+
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE) #use echo=FALSE for meeting printouts
+```
+
+## Initiate: load deseq and data
+```{r init, results='hide',message=FALSE, cache=TRUE}
+library("DESeq2")
+```
+Load count data.
+```{r data, cache=TRUE}
+counts_all <- read.table("/Users/BarbaraMaria/Dropbox/projects/2016_dsx-phase2/data/counts_all.tsv",header=T,row.names=1)
+```
+Generate the phenotype data from the column names, and add the 'group' category.
+```{r phenotype, cache=TRUE}
+all_names <- as.vector(colnames(counts_all))
+temp_li <- strsplit(all_names, "_")
+temp_mat <- matrix(unlist(temp_li), ncol=5,byrow=TRUE)
+category_df <- as.data.frame(temp_mat)
+colnames(category_df) <- c("size","treatment","sex","tissue","sample")
+rownames(category_df) <- all_names
+pasted <- c('size','treatment','sex','tissue')
+category_df$group <- apply(category_df[,pasted],1,paste,collapse='')
+category_df$group <- as.factor(category_df$group)
+```
+Confirm data input:
+```{r confirm data}
+dim(counts_all)
+summary(category_df)
+```
+
+## Run the actual analysis
+Run DESeq2: create matrix, then analyse differential expression per group.
+```{r deseq, cache=TRUE}
+large_data_dds <- DESeqDataSetFromMatrix(countData = counts_all, colData=category_df, design=~group)
+large_data_dds <- DESeq(large_data_dds)
+```
+
+### Extract pairwise contrasts:
+First for nutrition results.
+```{r contrasts nutrition, cache=TRUE}
+cmh <- results(large_data_dds, contrast=c("group","smallctrlmalehh","largectrlmalehh"))
+dmh <- results(large_data_dds, contrast=c("group","smalldsxmalehh","largedsxmalehh"))
+cmt <- results(large_data_dds, contrast=c("group","smallctrlmaleth","largectrlmaleth"))
+dmt <- results(large_data_dds, contrast=c("group","smalldsxmaleth","largedsxmaleth"))
+cmg <- results(large_data_dds, contrast=c("group","smallctrlmalegen","largectrlmalegen"))
+dmg <- results(large_data_dds, contrast=c("group","smalldsxmalegen","largedsxmalegen"))
+cmb <- results(large_data_dds, contrast=c("group","smallctrlmalebrain","largectrlmalebrain"))
+dmb <- results(large_data_dds, contrast=c("group","smalldsxmalebrain","largedsxmalebrain"))
+```
+Then for treatment results (i.e.: control vs. dsx-injected).
+```{r contrasts treatment, cache=TRUE}
+smh <- results(large_data_dds, contrast=c("group","smallctrlmalehh","smalldsxmalehh"))
+smt <- results(large_data_dds, contrast=c("group","smallctrlmaleth","smalldsxmaleth"))
+smg <- results(large_data_dds, contrast=c("group","smallctrlmalegen","smalldsxmalegen"))
+smb <- results(large_data_dds, contrast=c("group","smallctrlmalebrain","smalldsxmalebrain"))
+lmh <- results(large_data_dds, contrast=c("group","largectrlmalehh","largedsxmalehh"))
+lmt <- results(large_data_dds, contrast=c("group","largectrlmaleth","largedsxmaleth"))
+lmg <- results(large_data_dds, contrast=c("group","largectrlmalegen","largedsxmalegen"))
+lmb <- results(large_data_dds, contrast=c("group","largectrlmalebrain","largedsxmalebrain"))
+lfh <- results(large_data_dds, contrast=c("group","largectrlfemalehh","largedsxfemalehh"))
+lft <- results(large_data_dds, contrast=c("group","largectrlfemaleth","largedsxfemaleth"))
+lfg <- results(large_data_dds, contrast=c("group","largectrlfemalegen","largedsxfemalegen"))
+lfb <- results(large_data_dds, contrast=c("group","largectrlfemalebrain","largedsxfemalebrain"))
+```
+Then for sex biased expression.
+```{r contrasts sex, cache=TRUE}
+#sex
+lch <- results(large_data_dds, contrast=c("group","largectrlfemalehh","largectrlmalehh"))
+lct <- results(large_data_dds, contrast=c("group","largectrlfemaleth","largectrlmaleth"))
+lcg <- results(large_data_dds, contrast=c("group","largectrlfemalegen","largectrlmalegen"))
+lcb <- results(large_data_dds, contrast=c("group","largectrlfemalebrain","largectrlmalebrain"))
+ldh <- results(large_data_dds, contrast=c("group","largedsxfemalehh","largedsxmalehh"))
+ldt <- results(large_data_dds, contrast=c("group","largedsxfemaleth","largedsxmaleth"))
+ldg <- results(large_data_dds, contrast=c("group","largedsxfemalegen","largedsxmalegen"))
+ldb <- results(large_data_dds, contrast=c("group","largedsxfemalebrain","largedsxmalebrain"))
+```
+Save the image for future use.
+```{r save}
+save.image(file="/Users/BarbaraMaria/Dropbox/projects/2016_dsx-phase2/phase2_deseq2.RData")
+```

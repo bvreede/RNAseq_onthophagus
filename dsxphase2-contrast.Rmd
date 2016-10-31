@@ -1,0 +1,179 @@
+---
+title: "DSX project - Phase 2 contrast analysis"
+author: "Barbara Vreede"
+date: "October 2016"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Initiate: load results from deseq2
+```{r init, results='hide',message=FALSE, cache=TRUE}
+load("/Users/BarbaraMaria/Dropbox/projects/2016_dsx-phase2/phase2_deseq2.RData")
+```
+```{r include=FALSE}
+smh
+# This chunk is here to call deseq results, so that the package loading reports don't show up in the final document.
+```
+## Functions
+```{r functions, message=FALSE}
+sig <- function(rds){
+  rds <- as.data.frame(rds) #required in function to convert deseq object
+  rds_sig <- rds[complete.cases(rds$padj),]
+  rds_sig <- rds_sig[rds_sig$padj<=0.05,]
+  return(rds_sig)
+}
+
+pos <- function(rds){
+  rds_pos <- rds[rds$log2FoldChange>0,]
+  return(rds_pos)
+}
+
+neg <- function(rds){
+  rds_neg <- rds[rds$log2FoldChange<0,]
+  return(rds_neg)
+}
+```
+## DSX target genes
+This set contains the following contrast data (NB: Comparisons between A and B yield fold change tables that are positive if A's counts are higher, and negative if B's counts are higher).
+
+### Small males:
+```{r explore data treatment small males, echo=FALSE}
+head(smh,n=0)
+head(smt,n=0)
+head(smg,n=0)
+head(smb,n=0)
+```
+### Large males:
+```{r explore data treatment large males, echo=FALSE}
+head(lmh,n=0)
+head(lmt,n=0)
+head(lmg,n=0)
+head(lmb,n=0)
+```
+### Large females:
+```{r explore data treatment large females, echo=FALSE}
+head(lfh,n=0)
+head(lft,n=0)
+head(lfg,n=0)
+head(lfb,n=0)
+```
+### Significant expression differences and fold changes
+Make dataframes containing only significantly differently expressed genes, as well as subselections containing genes with a positive or negative fold change.
+```{r apply selection shown, cache=TRUE}
+smh_sig <- sig(smh)
+smh_pos <- pos(smh_sig)
+smh_neg <- neg(smh_sig)
+```
+Same is repeated for large males and females, and across all tissues.
+```{r apply selection hidden, echo=FALSE, cache=TRUE}
+smt_sig <- sig(smt)
+smt_pos <- pos(smt_sig)
+smt_neg <- neg(smt_sig)
+
+smg_sig <- sig(smg)
+smg_pos <- pos(smg_sig)
+smg_neg <- neg(smg_sig)
+
+smb_sig <- sig(smb)
+smb_pos <- pos(smb_sig)
+smb_neg <- neg(smb_sig)
+
+lmh_sig <- sig(lmh)
+lmh_pos <- pos(lmh_sig)
+lmh_neg <- neg(lmh_sig)
+
+lmt_sig <- sig(lmt)
+lmt_pos <- pos(lmt_sig)
+lmt_neg <- neg(lmt_sig)
+
+lmg_sig <- sig(lmg)
+lmg_pos <- pos(lmg_sig)
+lmg_neg <- neg(lmg_sig)
+
+lmb_sig <- sig(lmb)
+lmb_pos <- pos(lmb_sig)
+lmb_neg <- neg(lmb_sig)
+
+lfh_sig <- sig(lfh)
+lfh_pos <- pos(lfh_sig)
+lfh_neg <- neg(lfh_sig)
+
+lft_sig <- sig(lft)
+lft_pos <- pos(lft_sig)
+lft_neg <- neg(lft_sig)
+
+lfg_sig <- sig(lfg)
+lfg_pos <- pos(lfg_sig)
+lfg_neg <- neg(lfg_sig)
+
+lfb_sig <- sig(lfb)
+lfb_pos <- pos(lfb_sig)
+lfb_neg <- neg(lfb_sig)
+
+```
+Put the data in a new dataframe:
+```{r treatment dataframe}
+sizecol <- rep(rep(c(rep("small",2),rep("large",2)),2),4)
+sexcol <- rep(c("male","female"),16)
+tisscol <- c(rep("hh",8),rep("th",8),rep("gen",8),rep("brain",8))
+fccol <- rep(c(rep("pos",4),rep("neg",4)),4)
+datacol <- c(dim(smh_pos)[1],NA,dim(lmh_pos)[1],dim(lfh_pos)[1],
+             dim(smh_neg)[1],NA,dim(lmh_neg)[1],dim(lfh_neg)[1],
+             dim(smt_pos)[1],NA,dim(lmt_pos)[1],dim(lft_pos)[1],
+             dim(smt_neg)[1],NA,dim(lmt_neg)[1],dim(lft_neg)[1],
+             dim(smg_pos)[1],NA,dim(lmg_pos)[1],dim(lfg_pos)[1],
+             dim(smg_neg)[1],NA,dim(lmg_neg)[1],dim(lfg_neg)[1],
+             dim(smb_pos)[1],NA,dim(lmb_pos)[1],dim(lfb_pos)[1],
+             dim(smb_neg)[1],NA,dim(lmb_neg)[1],dim(lfb_neg)[1])
+treatment.df <- data.frame(sizecol,sexcol,tisscol,fccol,datacol)
+colnames(treatment.df) <- c("size","sex","tissue","fc","n")
+```
+
+```{r plot data}
+plot(treatment.df$tissue,treatment.df$n,ylab="number of genes",xlab="tissue")
+```
+
+#### Head horn results
+| |Small males|Small females|Large males|Large females|
+|:---|---:|---:|---:|---:|
+|**total**|`r dim(smh_sig)[1]`| |`r dim(lmh_sig)[1]`|`r dim(lfh_sig)[1]`|
+|**positive (ctrl-biased)**|`r dim(smh_pos)[1]`| |`r dim(lmh_pos)[1]`|`r dim(lfh_pos)[1]`|
+|**negative (dsx-biased)**|`r dim(smh_neg)[1]`| |`r dim(lmh_neg)[1]`|`r dim(lfh_neg)[1]`|
+
+#### Thoracic horn results
+| |Small males|Small females|Large males|Large females|
+|:---|---:|---:|---:|---:|
+|**total**|`r dim(smt_sig)[1]`| |`r dim(lmt_sig)[1]`|`r dim(lft_sig)[1]`|
+|**positive (ctrl-biased)**|`r dim(smt_pos)[1]`| |`r dim(lmt_pos)[1]`|`r dim(lft_pos)[1]`|
+|**negative (dsx-biased)**|`r dim(smt_neg)[1]`| |`r dim(lmt_neg)[1]`|`r dim(lft_neg)[1]`|
+
+#### Genitalia results
+| |Small males|Small females|Large males|Large females|
+|:---|---:|---:|---:|---:|
+|**total**|`r dim(smg_sig)[1]`| |`r dim(lmg_sig)[1]`|`r dim(lfg_sig)[1]`|
+|**positive (ctrl-biased)**|`r dim(smg_pos)[1]`| |`r dim(lmg_pos)[1]`|`r dim(lfg_pos)[1]`|
+|**negative (dsx-biased)**|`r dim(smg_neg)[1]`| |`r dim(lmg_neg)[1]`|`r dim(lfg_neg)[1]`|
+
+#### Brain results
+| |Small males|Small females|Large males|Large females|
+|:---|---:|---:|---:|---:|
+|**total**|`r dim(smb_sig)[1]`| |`r dim(lmb_sig)[1]`|`r dim(lfb_sig)[1]`|
+|**positive (ctrl-biased)**|`r dim(smb_pos)[1]`| |`r dim(lmb_pos)[1]`|`r dim(lfb_pos)[1]`|
+|**negative (dsx-biased)**|`r dim(smb_neg)[1]`| |`r dim(lmb_neg)[1]`|`r dim(lfb_neg)[1]`|
+
+
+### Overlap between categories: how many genes are shared? Do they do the same thing?
+
+
+
+
+## Ideas and to-do
+Cluster count table so that genes
+
+## Session information
+```{r session_info, echo=FALSE}
+sessionInfo()
+```
+This document was processed on: `r Sys.Date()`.
