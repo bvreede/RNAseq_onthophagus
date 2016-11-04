@@ -1,0 +1,110 @@
+---
+title: "Preparing the gene databases"
+author: "Barbara Vreede"
+date: "November 3, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Python tsv file fixes
+Working with databases that include apostrophes in their cells is problematic, as R does not want to read them most of the time. To remove them, I wrote the following bit in python:
+
+```{python remove_apostrophes}
+def problemfixer(l):
+	l = l.replace("5'","5pr")
+	l = l.replace("3'","3pr")
+	l = l.replace("2'","2pr")
+	l=l.replace("'","") #all other apostrophes are simply removed
+	return l
+
+def newtsv(name):
+  infile = open(name)
+  newname = name[:-4]+"2.tsv"
+  outfile = open(newname,"w")
+  
+  count = 0 #not necessary, but useful trick to fish out problematic lines if R keeps giving errors
+  dbdict = {} #not necessary, but useful trick to fish out problematic lines if R keeps giving errors
+  for line in infile:
+	  count +=1
+	  if name[-3:] == "tsv":
+	    lili = line.split('\t')
+	  elif name[-3:] == "csv":
+	    lili = line.split(';')
+	  dbdict[count] = lili
+	  for l in lili[:-1]:
+	  	l = problemfixer(l)
+	  	outfile.write("%s\t"%l.strip())
+	  lastl = problemfixer(lili[-1].strip())
+	  outfile.write("%s\n" %lastl)
+  outfile.close()
+  return dbdict
+
+#run the module on eg. the following file:
+newtsv("/Users/BarbaraMaria/Dropbox/projects/2016_dsx-phase2/data/otau_blast2go_mapping.tsv")
+
+#uncomment the following to return problematic lines to the console
+#print dbdict[10214]
+```
+
+
+### Generating a tidy dataset with gene descriptors
+Derived from one of the annotated result files in Box, is this gene annotation file.
+```{r open gene annotation}
+genedata <- read.table("/Users/BarbaraMaria/Dropbox/projects/2016_dsx-phase2/data/otau-genedata/Otau_genedata.tsv", sep="\t",header=TRUE)
+```
+
+There are various result files from Blast2GO efforts in the data. I don't know at the moment what their purpose is. Here is one:
+```{r open go mapping}
+gomapping <- read.table("/Users/BarbaraMaria/Dropbox/projects/2016_dsx-phase2/data/otau_blast2go_mapping2.tsv",sep="\t",header=TRUE)
+head(gomapping)
+```
+Reading the first lines already reveals that there are multiple entries per gene, which makes it an untidy dataset at the moment. I will need to find out how it was generated before proceeding to turn this into a tidy dataset.  
+
+For now, this seems to be the most useful source file. It is modified from Box/Onthophagus/OtauGenomicData/otau_blastP_uniprot_GO.txt. 
+```{r open go annotation}
+godata <- read.table("/Users/BarbaraMaria/Dropbox/projects/2016_dsx-phase2/data/Otau-genedata/Otau_godata.tsv",sep="\t",header=TRUE)
+```
+
+With these files open, let's modify and merge them. First step is to turn the godata into a smaller file, with correct headers.
+```{r godata amend}
+#select columns from the go dataset
+godata_small <- godata[c(2,15,16,17,19,20,21,22,23,24)]
+#turn the name of "queryID" into "geneID"
+colnames(godata_small)[1] <- "geneID"
+```
+Both datasets have different dimensions:
+```{r}
+dim(godata_small)
+dim(genedata)
+```
+Which means that they only partly overlap, and merging will lose data. So let's separate the data in the larger dataset (the gene annotations) that is unique, and make sure that it can be added to the larger dataset by adding empty columns.
+```{r save unique genes}
+unique_genes <- setdiff(genedata$geneID,godata_small$geneID)
+unique_df <- genedata[genedata$geneID %in% unique_genes,]
+totalu  <- length(unique_genes)
+unique_df$protein_names <- c(rep(NA,totalu))
+unique_df$gene_names <- c(rep(NA,totalu))
+unique_df$organism <-c(rep(NA,totalu))
+unique_df$pathway <-c(rep(NA,totalu))
+unique_df$GO <-c(rep(NA,totalu))
+unique_df$GO_biolproc <- c(rep(NA,totalu))
+unique_df$GO_molfun <- c(rep(NA,totalu))
+unique_df$GO_celcomp <- c(rep(NA,totalu))
+unique_df$GO_IDs <- c(rep(NA,totalu))
+```
+The unique data is now saved; let's merge the GO-data and annotation data, and add the unique data to that new database.
+```{r merge and combine}
+combodata <- merge(genedata,godata_small,by="geneID")
+totaldata <- rbind(unique_df,combodata)
+```
+This table is currently a messy dataset, so let's order it and save it for future use.
+
+```{r order and save}
+totaldata <- totaldata[order(totaldata$geneID),]
+rownames(totaldata) <- c(1:17483)
+totaldata[totaldata==""] <- NA
+write.table(totaldata, file="/Users/BarbaraMaria/Dropbox/projects/2016_dsx-phase2/data/Otau-genedata/Otau_combineddata.tsv", quote=FALSE, sep="\t")
+```
