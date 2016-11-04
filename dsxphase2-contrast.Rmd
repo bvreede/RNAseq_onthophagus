@@ -167,10 +167,13 @@ plot(treatment.df$tissue,treatment.df$n,ylab="number of genes",xlab="tissue")
 ### Overlap between categories: how many genes are shared? Do they do the same thing?
 
 
-
+## Import category data
+```{r category import}
+genedata <- read.table("/Users/BarbaraMaria/Dropbox/projects/2016_dsx-phase2/data/Otau-genedata/Otau_combineddata.tsv", sep="\t",header=TRUE)
+```
 
 ## Ideas and to-do
-Cluster count table so that genes
+Cluster count table so that gene clusters behaving in the same way could be isolated.
 
 ## Session information
 ```{r session_info, echo=FALSE}
