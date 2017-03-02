@@ -82,18 +82,19 @@ for n in samplenos:
 	# find filename
 	fname = filenames[n].lower()
 	# determine sex and treatment from filename
-	if 'dsxM' in fname:
+	if 'dsxm' in fname:
 		treatment = "dsx"
 		sex = "male"
-	elif 'dsxF' in fname:
+	elif 'dsxf' in fname:
 		treatment = "dsx"
 		sex = "female"
-	elif 'ctrlM' in fname:
+	elif 'ctrlm' in fname:
 		treatment = "ctrl"
 		sex = "male"
-	elif 'ctrlF' in fname:
+	elif 'ctrlf' in fname:
 		treatment = "ctrl"
 		sex = "female"
 	else:
 		print "Could not determine sex/treatment for file %s (sample S%s)." %(fname,n)
+		continue
 	print fname, sname, treatment, sex
