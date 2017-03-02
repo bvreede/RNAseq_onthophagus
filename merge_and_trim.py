@@ -70,6 +70,8 @@ for i in os.listdir(rawreads):
 		fileno = subfileno
 	samplenos.append(fileno)
 	filenames[fileno] = i
+	if i.split('.')[-1] != 'fastq':
+		print "File %s is not a fastq file. Please investigate." %i
 gsftf.close()
 
 #make the sample list unique
@@ -109,4 +111,12 @@ for n in samplenos:
 	else:
 		print "Could not determine tissue for file %s (sample S%s)." %(fname,n)
 		continue
-	print fname, sname, treatment, sex,tissue
+	# determine size from filename !! FROM PROJECT ID!
+	if "863" in fname:
+		size = 'sm'
+	elif "1120" in fname:
+		size = 'la'
+	else:
+		print "Could not determine size for file %s (sample S%s)." %(fname,n)
+		continue
+	print fname, "%s_%s_%s_%s_%s.fastq" %(size,sex,treatment,tissue,sname)
