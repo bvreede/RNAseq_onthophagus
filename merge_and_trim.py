@@ -119,4 +119,4 @@ for n in samplenos:
 	else:
 		print "Could not determine size for file %s (sample S%s)." %(fname,n)
 		continue
-	print fname, "%s_%s_%s_%s_%s.fastq" %(size,sex,treatment,tissue,sname)
+	print fname, "%s_%s_%s_%s_S%s.fastq" %(size,sex,treatment,tissue,n)
