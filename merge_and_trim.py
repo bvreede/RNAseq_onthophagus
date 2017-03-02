@@ -34,9 +34,10 @@ else:
 
 for i in os.listdir(rawreads):
 	#unzip if necessary
-	if i[-3:] == ".gz":\
+	if i[-3:] == ".gz":
 		print "Unzipping", i
 		os.system("gunzip %s/%s" %(rawreads,i))
+		i = i.replace('.gz','') #update filename
 	gsf = i.split('-')[0]
 	if gsf == 'GSF':
 		gsf = 'GSF'+i.split('-')[1]
