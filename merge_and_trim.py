@@ -122,4 +122,5 @@ for n in samplenos:
 		continue
 	newname = "%s/%s_%s_%s_%s_S%s.fastq" %(jointreads,size,sex,treatment,tissue,n)
 	# concatenate all files from this sample to the new file.
+	print "Concatenating all files for sample S%s..." %n
 	os.system("cat *%s* > %s" %sname,newname)
