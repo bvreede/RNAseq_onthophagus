@@ -80,7 +80,7 @@ for n in samplenos:
 	# determine sample name as used in filename
 	sname = "_S%s_" %n
 	# find filename
-	fname = lower(filenames[n])
+	fname = filenames[n].lower()
 	# determine sex and treatment from filename
 	if 'dsxM' in fname:
 		treatment = "dsx"
