@@ -38,6 +38,8 @@ filenames = {}
 #Go through files and unzip and change names if necessary.
 #This is also used to collect the sample numbers
 for i in os.listdir(rawreads):
+	if i[0] == '.':
+		continue
 	#unzip if necessary
 	if i[-3:] == ".gz":
 		print "Unzipping", i
