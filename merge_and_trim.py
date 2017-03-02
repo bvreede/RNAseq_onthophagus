@@ -79,6 +79,7 @@ samplenos = list(set(samplenos))
 
 #Merge sequence files from the same sample.
 for n in samplenos:
+	# First, a very elaborate sequence of finding the correct name for the cat file
 	# determine sample name as used in filename
 	sname = "_S%s_" %n
 	# find filename
@@ -119,4 +120,6 @@ for n in samplenos:
 	else:
 		print "Could not determine size for file %s (sample S%s)." %(fname,n)
 		continue
-	print fname, "%s_%s_%s_%s_S%s.fastq" %(size,sex,treatment,tissue,n)
+	newname = "%s/%s_%s_%s_%s_S%s.fastq" %(jointreads,size,sex,treatment,tissue,n)
+	# concatenate all files from this sample to the new file.
+	os.system("cat *%s* > %s" %sname,newname)
