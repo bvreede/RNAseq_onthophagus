@@ -6,6 +6,7 @@
 
 import os,sys
 
+# Establish folders necessary
 rawreads = "/Volumes/HD1V2/dsxRNAseq/barbara/rawreads"
 jointreads = "/Volumes/HD1V2/dsxRNAseq/barbara/jointreads"
 trimmed = "/Volumes/HD1V2/dsxRNAseq/barbara/trimmedreads"
@@ -23,8 +24,7 @@ if not os.path.exists(trimmed):
 if not os.path.exists(meta):
 	os.system("mkdir %s" %meta)
 
-
-#Translation file
+#Translation meta file
 gsftf_fn = "%s/GSF1120_sampletranslation.csv"
 if os.path.exists("%s/%s" %(meta,gsftf_fn)):
 	gsftf = open("%s/GSF1120_sampletranslation.csv" %meta,"a")
@@ -32,6 +32,11 @@ else:
 	gsftf = open("%s/GSF1120_sampletranslation.csv" %meta,"w")
 	gsftf.write("filename,new_filename,sampleID,new_sampleID\n")
 
+samplenos = []
+filenames = {}
+
+#Go through files and unzip and change names if necessary.
+#This is also used to collect the sample numbers
 for i in os.listdir(rawreads):
 	#unzip if necessary
 	if i[-3:] == ".gz":
@@ -59,6 +64,17 @@ for i in os.listdir(rawreads):
 		gsftf.write("%s,%s,%s,%s\n" %(i,newi,fileno,subfileno))
 		print "Changing filename for", i
 		os.system("mv %s/%s %s/%s" %(rawreads,i,rawreads,newi)) #change the name of the file
-		
-		
+		# apply the new sample number
+		fileno = subfileno
+	sampleno.append(fileno)
+	filenames[fileno] = i
+gsftf.close()
+
+#make the sample list unique
+samplenos = list(set(samplenos))
+
+#Merge sequence files from the same sample.
+for n in samplenos:
+	print n
+
 		
