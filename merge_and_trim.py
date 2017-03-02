@@ -98,13 +98,13 @@ for n in samplenos:
 		print "Could not determine sex/treatment for file %s (sample S%s)." %(fname,n)
 		continue
 	# determine tissue from filename
-	if '-che-' in fname:
+	if '-che' in fname:
 		tissue = 'HH'
-	elif '-the-' in fname:
+	elif '-the' in fname:
 		tissue = 'TH'
-	elif '-br-' in fname:
+	elif '-br' in fname:
 		tissue = 'BR'
-	elif '-gen-' in fname:
+	elif '-gen' in fname:
 		tissue = 'GN'
 	else:
 		print "Could not determine tissue for file %s (sample S%s)." %(fname,n)
