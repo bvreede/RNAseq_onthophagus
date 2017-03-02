@@ -122,5 +122,8 @@ for n in samplenos:
 		continue
 	newname = "%s/%s_%s_%s_%s_S%s.fastq" %(jointreads,size,sex,treatment,tissue,n)
 	# concatenate all files from this sample to the new file.
-	print "Concatenating all files for sample S%s..." %n
-	os.system("cat %s/*%s* > %s" %(rawreads,sname,newname))
+	if os.path.exists(newname):
+		print "The concatenated file for sample S%s already exists. Continue with next file..." %n
+	else:
+		print "Concatenating all files for sample S%s..." %n
+		os.system("cat %s/*%s* > %s" %(rawreads,sname,newname))
