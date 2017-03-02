@@ -66,7 +66,7 @@ for i in os.listdir(rawreads):
 		os.system("mv %s/%s %s/%s" %(rawreads,i,rawreads,newi)) #change the name of the file
 		# apply the new sample number
 		fileno = subfileno
-	sampleno.append(fileno)
+	samplenos.append(fileno)
 	filenames[fileno] = i
 gsftf.close()
 
