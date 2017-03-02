@@ -77,6 +77,23 @@ samplenos = list(set(samplenos))
 
 #Merge sequence files from the same sample.
 for n in samplenos:
-	print n
-
-		
+	# determine sample name as used in filename
+	sname = "_S%s_" %n
+	# find filename
+	fname = lower(filenames[n])
+	# determine sex and treatment from filename
+	if 'dsxM' in fname:
+		treatment = "dsx"
+		sex = "male"
+	elif 'dsxF' in fname:
+		treatment = "dsx"
+		sex = "female"
+	elif 'ctrlM' in fname:
+		treatment = "ctrl"
+		sex = "male"
+	elif 'ctrlF' in fname:
+		treatment = "ctrl"
+		sex = "female"
+	else:
+		print "Could not determine sex/treatment for file %s (sample S%s)." %(fname,n)
+	print fname, sname, treatment, sex
