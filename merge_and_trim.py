@@ -7,10 +7,10 @@
 import os,sys
 
 # Establish folders necessary
-rawreads = "/Volumes/HD1V2/dsxRNAseq/barbara/rawreads"
-jointreads = "/Volumes/HD1V2/dsxRNAseq/barbara/jointreads"
-trimmed = "/Volumes/HD1V2/dsxRNAseq/barbara/trimmedreads"
-meta = "/Volumes/HD1V2/dsxRNAseq/barbara/meta"
+rawreads = "/Volumes/HD1v2/dsxRNAseq/barbara/rawreads"
+jointreads = "/Volumes/HD3v2/barbara/jointreads"
+trimmed = "/Volumes/HD3v2/barbara/trimmedreads"
+meta = "/Volumes/HD1v2/dsxRNAseq/barbara/meta"
 
 if not os.path.exists(rawreads):
 	sys.exit("Input folder 'rawreads' (%s) is not available. Check the path and try again." %rawreads)
