@@ -87,16 +87,16 @@ for n in samplenos:
 	# determine sex and treatment from filename
 	if 'dsxm' in fname:
 		treatment = "dsx"
-		sex = "mal"
+		sex = "male"
 	elif 'dsxf' in fname:
 		treatment = "dsx"
-		sex = "fem"
+		sex = "female"
 	elif 'ctrlm' in fname:
 		treatment = "ctrl"
-		sex = "mal"
+		sex = "male"
 	elif 'ctrlf' in fname:
 		treatment = "ctrl"
-		sex = "fem"
+		sex = "female"
 	else:
 		print "Could not determine sex/treatment for file %s (sample S%s)." %(fname,n)
 		continue
@@ -108,15 +108,17 @@ for n in samplenos:
 	elif '-br' in fname:
 		tissue = 'BR'
 	elif '-gen' in fname:
-		tissue = 'GN'
+		tissue = 'GEN'
 	else:
 		print "Could not determine tissue for file %s (sample S%s)." %(fname,n)
 		continue
 	# determine size from filename !! FROM PROJECT ID!
 	if "863" in fname:
-		size = 'la'
+		size = 'large'
 	elif "1120" in fname:
-		size = 'sm'
+		size = 'small'
+	elif "1387" in fname:
+		size = 'small'
 	else:
 		print "Could not determine size for file %s (sample S%s)." %(fname,n)
 		continue
