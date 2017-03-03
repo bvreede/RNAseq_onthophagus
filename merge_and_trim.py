@@ -26,7 +26,7 @@ if not os.path.exists(meta):
 
 #Translation meta file
 gsftf_fn = "%s/GSF1120_sampletranslation.csv" %meta
-if os.path.exists("%s/%s" %(meta,gsftf_fn)):
+if os.path.exists(gsftf_fn):
 	gsftf = open(gsftf_fn,"a")
 else:
 	gsftf = open(gsftf_fn,"w")
@@ -142,4 +142,3 @@ for n in samplenos:
 	else:
 		print "Trimming reads for sample S%s..." %n	
 		os.system("java -jar ~/bin/Trimmomatic-0.36/trimmomatic-0.36.jar SE -threads 8 -phred33 %s %s ILLUMINACLIP:TruSeq3-SE:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36" %(jointname,trimname))
-"""
