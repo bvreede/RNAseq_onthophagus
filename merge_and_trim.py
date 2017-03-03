@@ -114,16 +114,24 @@ for n in samplenos:
 		continue
 	# determine size from filename !! FROM PROJECT ID!
 	if "863" in fname:
-		size = 'sm'
-	elif "1120" in fname:
 		size = 'la'
+	elif "1120" in fname:
+		size = 'sm'
 	else:
 		print "Could not determine size for file %s (sample S%s)." %(fname,n)
 		continue
-	newname = "%s/%s_%s_%s_%s_S%s.fastq" %(jointreads,size,sex,treatment,tissue,n)
+		
 	# concatenate all files from this sample to the new file.
-	if os.path.exists(newname):
-		print "The concatenated file for sample S%s already exists. Continue with next file..." %n
+	jointname = "%s/%s_%s_%s_%s_S%s.fastq" %(jointreads,size,sex,treatment,tissue,n)
+	if os.path.exists(jointname):
+		print "The concatenated file for sample S%s already exists. Continue to trimming..." %n
 	else:
 		print "Concatenating all files for sample S%s..." %n
-		os.system("cat %s/*%s* > %s" %(rawreads,sname,newname))
+		os.system("cat %s/*%s* > %s" %(rawreads,sname,jointname))
+	# trim the file based on the quality score
+	trimname = "%s/%s_%s_%s_%s_S%s_trimmed.fastq" %(trimmed,size,sex,treatment,tissue,n)
+	if os.path.exists(trimname):
+		print "The trimmed read for sample S%s already exists. Continue with next file..." %n
+	else:
+		print "Trimming reads for sample S%s..." %n	
+		os.system("java -jar ~/bin/Trimmomatic-0.36/trimmomatic-0.36.jar SE -threads 8 -phred33 %s %s ILLUMINACLIP:TruSeq3-SE:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36" %(jointname,trimname))
