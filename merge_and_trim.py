@@ -25,11 +25,11 @@ if not os.path.exists(meta):
 	os.system("mkdir %s" %meta)
 
 #Translation meta file
-gsftf_fn = "%s/GSF1120_sampletranslation.csv"
+gsftf_fn = "%s/GSF1120_sampletranslation.csv" %meta
 if os.path.exists("%s/%s" %(meta,gsftf_fn)):
-	gsftf = open("%s/GSF1120_sampletranslation.csv" %meta,"a")
+	gsftf = open(gsftf_fn,"a")
 else:
-	gsftf = open("%s/GSF1120_sampletranslation.csv" %meta,"w")
+	gsftf = open(gsftf_fn,"w")
 	gsftf.write("filename,new_filename,sampleID,new_sampleID\n")
 
 samplenos = []
@@ -52,7 +52,7 @@ for i in os.listdir(rawreads):
 	gsf = gsf[:-1]
 	#determine the sample number
 	fileno = i.split('_S')[1].split('_')[0] #sample number
-	if gsf == 'GSF1120': #GSF1120 is different, because there are two numbers in the filename
+	if gsf == 'GSF1120': #GSF1120 is different, because there are two numbers in the filename, so this needs to be fixed.
 		subfileno = i.split('_S')[0].split('-')[-1] 
 		# create a filename so that only one sample ID is written in the filename
 		newi = i.replace('-' + subfileno,'')
@@ -60,6 +60,10 @@ for i in os.listdir(rawreads):
 		try:
 			int(subfileno)
 		except ValueError: # this means the subfilenumber is not a number, which means the filename has already been changed.
+			samplenos.append(fileno)
+			filenames[fileno] = i
+			if i.split('.')[-1] != 'fastq':
+				print "File %s is not a fastq file. Please investigate." %i
 			continue
 		newi = newi.replace('_S%s_' %fileno,'_S%s_' %subfileno)
 		# put the old and new name in the meta database
@@ -76,6 +80,7 @@ gsftf.close()
 
 #make the sample list unique
 samplenos = list(set(samplenos))
+print "Total raw samples:", len(samplenos)
 
 #Merge sequence files from the same sample.
 for n in samplenos:
@@ -117,7 +122,7 @@ for n in samplenos:
 		size = 'large'
 	elif "1120" in fname:
 		size = 'small'
-	elif "1387" in fname:
+	elif "1287" in fname:
 		size = 'small'
 	else:
 		print "Could not determine size for file %s (sample S%s)." %(fname,n)
@@ -137,3 +142,4 @@ for n in samplenos:
 	else:
 		print "Trimming reads for sample S%s..." %n	
 		os.system("java -jar ~/bin/Trimmomatic-0.36/trimmomatic-0.36.jar SE -threads 8 -phred33 %s %s ILLUMINACLIP:TruSeq3-SE:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36" %(jointname,trimname))
+"""
