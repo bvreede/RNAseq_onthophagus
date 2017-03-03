@@ -1,22 +1,25 @@
 #!/bin/bash
 #batch htseq alignment script
 
-PATH=$PATH:/Users/bioinformatics/bin/bowtie2-2.2.5
+import os
+
+#add bowtie and samtools to path
+PATH=$PATH:/Users/bioinformatics/bin/bowtie2-2.2.5:/Users/bioinformatics/bin/samtools-1.3.1
 export PATH
 
 tophatdir=/Users/bioinformatics/bin/tophat-2.0.14.OSX_x86_64
-gffdir=/Volumes/HD1/GenomicResources/OtauGenome/i5kdata/scaffold/analyses/BCM_version_0.5.3/consensus_gene_set
-outputdir=/Volumes/HD1/otau/i5kalignments/htseq_counts
-inputdir=/Volumes/HD1/otau/i5kalignments
+gff=/Volumes/HD1v2/otau/Onthophagus_Tophat_Index/OTAU.Models.gff3
+outputdir=/Volumes/HD3v2/barbara/htseq_counts
+inputdir=/Volumes/HD3v2/barbara/tophat_alignments
 
 cd $inputdir
 
-for file in WA*; do
+for file in *; do
 
-echo "Starting alignment of $file"
+echo "Starting count analysis for $file..."
 
-htseq-count -f bam -r pos -s no -t gene -i ID  $file/accepted_hits_sorted.bam $gffdir/OTAU.Models.gff3 > $outputdir/$file.counts
+htseq-count -f bam -r pos -s no -t gene -i ID  $file/accepted_hits.bam $gff > $outputdir/$file.counts
 
-echo "Finished aligning $file!"
+echo "Count analysis of $file complete."
 
 done
