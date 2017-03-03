@@ -1,0 +1,21 @@
+#### MAPPING READS FROM DSX PROJECT, PHASE TWO
+
+### DOWNLOAD FASTQ FILES FROM CGB SERVER into current working directory
+
+wget --user=ArminMoczek --password=GU1qorwR --no-check-certificate https://lims.cgb.indiana.edu/gs454/MoczekLab/GSF1120A-NextSeq75-6July2016/archive-GSF1120A-6July2016.tar.gz
+
+wget --user=ArminMoczek --password=GU1qorwR --no-check-certificate https://lims.cgb.indiana.edu/gs454/MoczekLab/GSF1120B-NextSeq75-7July2016/archive-GSF1120B-7July2016.tar.gz
+
+wget --user=ArminMoczek --password=GU1qorwR --no-check-certificate https://lims.cgb.indiana.edu/gs454/MoczekLab/GSF1120A-NextSeq75-6July2016/GSF1120A-ctrlM-BRN-L104_S13_R1_001.fastq.gz
+
+###### Trimming reads using Trimmomatic
+java -jar ~/bin/Trimmomatic-0.36/trimmomatic-0.36.jar SE -phred33 GSF1120A-ctrlM-BRN-L104_S13_R1_001.fastq.gz GSF1120A-ctrlM-BRN-L104_S13_R1_001.trimmed.fastq.gz ILLUMINACLIP:TruSeq3-SE:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+
+###### Aligning reads using TopHat
+~/bin/tophat-2.0.14.OSX_x86_64/tophat2 -o test --transcriptome-index=/Volumes/HD1//otau/Onthophagus_Tophat_Index/transcriptome-index -p8 --b2-very-sensitive --read-edit-dist 2 //Volumes/HD1/otau/Onthophagus_Tophat_Index/Otaur.scaffolds GSF1120A-ctrlM-BRN-L104_S13_R1_001.trimmed.fastq.gz 
+
+######Sorting with Samtools? Only for paired end data but...
+samtools sort -o accepted_hits.sorted.bam accepted_hits.bam 
+
+###### Making count table
+htseq-count -f bam -s reverse -t gene -i ID  -o testout.bam accepted_hits.sorted.bam /Volumes/HD1/GenomicResources/OtauGenome/i5kdata/scaffold/analyses/BCM_version_0.5.3/consensus_gene_set/OTAU.Models.gff3 > myawesomedata.awe 
