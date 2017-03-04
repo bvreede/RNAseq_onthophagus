@@ -15,7 +15,7 @@ for f in os.listdir(trimmed):
 	fn = ("%s/%s" %(trimmed,f))
 	os.system("rm %s" %fn)
 	fm = ("%s/%s" %(jointreads,f))
-	os.system("touch %s" %fn)
+	os.system("touch %s" %fm)
 
 """
 samplenos = []
