@@ -1,8 +1,6 @@
 #!/bin/python
 
-#Data merging and Trimmomatic trimming
-#Adapted from Ed Zattara's bash scripts
-#Written by Barbara Vreede
+
 
 import os,sys
 
@@ -12,7 +10,12 @@ jointreads = "/Volumes/HD3v2/barbara/jointreads"
 trimmed = "/Volumes/HD3v2/barbara/trimmedreads"
 meta = "/Volumes/HD1v2/dsxRNAseq/barbara/meta"
 
+for f in os.listdir(trimmed):
+	f = f.replace('_trimmed','')
+	fn = ("%s/%s" %(trimmed,f))
+	os.system("touch %s" %fn)
 
+"""
 samplenos = []
 filenames = {}
 
@@ -88,3 +91,4 @@ for n in samplenos:
 		print "The file for sample S%s already exists." %n
 	else:
 		os.system("touch %s" %jointname)
+"""
