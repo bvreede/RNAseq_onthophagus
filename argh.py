@@ -13,6 +13,8 @@ meta = "/Volumes/HD1v2/dsxRNAseq/barbara/meta"
 for f in os.listdir(trimmed):
 	f = f.replace('_trimmed','')
 	fn = ("%s/%s" %(trimmed,f))
+	os.system("rm %s" %fn)
+	fm = ("%s/%s" %(jointreads,f))
 	os.system("touch %s" %fn)
 
 """
