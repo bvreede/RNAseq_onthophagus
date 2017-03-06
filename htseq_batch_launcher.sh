@@ -1,7 +1,6 @@
 #!/bin/bash
 #batch htseq alignment script
 
-import os
 
 #add bowtie and samtools to path
 PATH=$PATH:/Users/bioinformatics/bin/bowtie2-2.2.5:/Users/bioinformatics/bin/samtools-1.3.1
