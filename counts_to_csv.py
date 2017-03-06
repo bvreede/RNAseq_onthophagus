@@ -14,13 +14,10 @@ if os.path.exists(outfile):
 out = open(outfile,"w")
 
 #make a list of gene IDs, from OTAU000001 to OTAU017483
-allgenes = []
-for n in range(1,17484):
-	gene = "OTAU" + str("%06d"%n)
-	allgenes.append(gene)
+["OTAU" + "%06d" %n for n in range(1,17484)]
 
 #make a dataframe that will contain the reads
-alldata = [['']] #empty list, containing only the first element, which is also a list.
+alldata = [['']]
 for g in allgenes:
 	alldata.append([g]) #for each gene, add the gene name as first element inside a list to the larger list
 
@@ -43,7 +40,10 @@ for file in os.listdir(htseqdir):
 		if gene == "":
 			d.append(sname) #adds the sample name to the first element in the list
 		else:
-			d.append(sdict[gene])
+			try:
+				d.append(sdict[gene])
+			except KeyError:
+				d.append("NA")
 
 
 #write the dataframe to the outputfile
