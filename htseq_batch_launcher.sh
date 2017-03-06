@@ -13,7 +13,7 @@ inputdir=/Volumes/HD3v2/barbara/tophat_alignments
 
 cd $inputdir
 
-for file in *; do
+for file in *_male_*; do
 
 echo "Starting count analysis for $file..."
 
