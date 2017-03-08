@@ -14,7 +14,7 @@ if os.path.exists(outfile):
 out = open(outfile,"w")
 
 #make a list of gene IDs, from OTAU000001 to OTAU017483
-["OTAU" + "%06d" %n for n in range(1,17484)]
+allgenes = ["OTAU" + "%06d" %n for n in range(1,17484)]
 
 #make a dataframe that will contain the reads
 alldata = [['']]
