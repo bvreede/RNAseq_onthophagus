@@ -72,7 +72,6 @@ for i in os.listdir(rawreads):
 		os.system("mv %s/%s %s/%s" %(rawreads,i,rawreads,newi)) #change the name of the file
 		# apply the new sample number
 		fileno = subfileno
-	"""
 	elif gsf == 'GSF1287': #again there are two numbers in the filename, so this needs to be fixed.
 		#first check if there are indeed two numbers:
 		test = i.split('_S')
@@ -91,22 +90,14 @@ for i in os.listdir(rawreads):
 			continue
 		# create a filename so that only one sample ID is written in the filename
 		subfileno = i.split('_S')[2].split('_')[0] 
-		try:
-			int(subfileno)
-		except ValueError: # this means the subfilenumber is not a number, which means the filename has already been changed.
-			samplenos.append(fileno)
-			filenames[fileno] = i
-			if i.split('.')[-1] != 'fastq':
-				print "File %s is not a fastq file. Please investigate." %i
-			continue
+		newi = i.replace('_' + subfileno,'')
 		newi = newi.replace('_S%s_' %fileno,'_S%s_' %subfileno)
 		# put the old and new name in the meta database
-		gsftf.write("%s,%s,%s,%s\n" %(i,newi,fileno,subfileno))
-		print "Changing filename for", i
-		os.system("mv %s/%s %s/%s" %(rawreads,i,rawreads,newi)) #change the name of the file
+		#gsftf.write("%s,%s,%s,%s\n" %(i,newi,fileno,subfileno))
+		print "Changing filename for", i, "to", newi
+		#os.system("mv %s/%s %s/%s" %(rawreads,i,rawreads,newi)) #change the name of the file
 		# apply the new sample number
 		fileno = subfileno
-	"""
 	samplenos.append(fileno)
 	filenames[fileno] = i
 	if i.split('.')[-1] != 'fastq':
@@ -116,7 +107,7 @@ gsftf.close()
 #make the sample list unique
 samplenos = list(set(samplenos))
 print "Total raw samples:", len(samplenos)
-
+"""
 #Merge sequence files from the same sample.
 for n in samplenos:
 	# First, a very elaborate sequence of finding the correct name for the cat file
@@ -177,3 +168,4 @@ for n in samplenos:
 	else:
 		print "Trimming reads for sample S%s..." %n	
 		os.system("java -jar ~/bin/Trimmomatic-0.36/trimmomatic-0.36.jar SE -threads 8 -phred33 %s %s ILLUMINACLIP:TruSeq3-SE:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36" %(jointname,trimname))
+"""
