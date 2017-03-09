@@ -116,7 +116,7 @@ for n in samplenos:
 	if 'dsxm' in fname:
 		treatment = "dsx"
 		sex = "male"
-	elif 'dsxf' in fname:
+	elif 'dsxf' or 'dsx_female' in fname:
 		treatment = "dsx"
 		sex = "female"
 	elif 'ctrlm' in fname:
@@ -129,7 +129,7 @@ for n in samplenos:
 		print "Could not determine sex/treatment for file %s (sample S%s)." %(fname,n)
 		continue
 	# determine tissue from filename
-	if '-che' or 'hh' in fname:
+	if '-che' or '_hh_' in fname:
 		tissue = 'HH'
 	elif '-the' in fname:
 		tissue = 'TH'
