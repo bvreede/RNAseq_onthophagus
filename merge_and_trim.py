@@ -122,7 +122,7 @@ for n in samplenos:
 	elif 'ctrlm' in fname:
 		treatment = "ctrl"
 		sex = "male"
-	elif 'ctrlf' in fname:
+	elif 'ctrlf' or 'ctrl_female' in fname:
 		treatment = "ctrl"
 		sex = "female"
 	else:
@@ -131,11 +131,11 @@ for n in samplenos:
 	# determine tissue from filename
 	if '-che' or '_hh_' in fname:
 		tissue = 'HH'
-	elif '-the' in fname:
+	elif '-the' or '_th_'in fname:
 		tissue = 'TH'
-	elif '-br' in fname:
+	elif '-br' or '_brn_' in fname:
 		tissue = 'BR'
-	elif '-gen' in fname:
+	elif '-gen' or '_gen_' in fname:
 		tissue = 'GEN'
 	else:
 		print "Could not determine tissue for file %s (sample S%s)." %(fname,n)
