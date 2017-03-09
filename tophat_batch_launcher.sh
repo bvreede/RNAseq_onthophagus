@@ -12,7 +12,7 @@ inputdir=/Volumes/HD3v2/barbara/trimmedreads
 
 cd $inputdir
 
-for file in small_male_dsx_TH*; do
+for file in *; do
 echo "Starting alignment of $file..."
 $tophatdir/tophat2 -o $outputdir/$file --transcriptome-index=$indexdir/transcriptome-index -p8 --b2-very-sensitive --read-edit-dist 2 $indexdir/Otaur.scaffolds $file
 echo "Alignment of $file complete."
