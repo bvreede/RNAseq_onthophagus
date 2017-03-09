@@ -90,8 +90,8 @@ for i in os.listdir(rawreads):
 			continue
 		# create a filename so that only one sample ID is written in the filename
 		subfileno = i.split('_S')[2].split('_')[0] 
-		newi = i.replace('_' + subfileno,'')
-		newi = newi.replace('_S%s_' %fileno,'_S%s_' %subfileno)
+		newi = i.replace('_S' + subfileno,'')
+		#newi = newi.replace('_S%s_' %subfileno,'_S%s_' %subfileno)
 		# put the old and new name in the meta database
 		#gsftf.write("%s,%s,%s,%s\n" %(i,newi,fileno,subfileno))
 		print "Changing filename for", i, "to", newi
