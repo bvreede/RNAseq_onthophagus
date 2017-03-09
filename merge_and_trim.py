@@ -106,7 +106,7 @@ samplenos = list(set(samplenos))
 print "Total raw samples:", len(samplenos)
 
 #Merge sequence files from the same sample.
-for n in ['215']:#samplenos:
+for n in samplenos:
 	# First, a very elaborate sequence of finding the correct name for the cat file
 	# determine sample name as used in filename
 	sname = "_S%s_" %n
@@ -153,11 +153,11 @@ for n in ['215']:#samplenos:
 		
 	# concatenate all files from this sample to the new file.
 	jointname = "%s/%s_%s_%s_%s_S%s.fastq" %(jointreads,size,sex,treatment,tissue,n)
-	#if os.path.exists(jointname):
-	#	print "The concatenated file for sample S%s already exists. Continue to trimming..." %n
-	#else:
-	print "Concatenating all files for sample S%s..." %n
-	os.system("cat %s/*%s* > %s" %(rawreads,sname,jointname))
+	if os.path.exists(jointname):
+		print "The concatenated file for sample S%s already exists. Continue to trimming..." %n
+	else:
+		print "Concatenating all files for sample S%s..." %n
+		os.system("cat %s/*%s* > %s" %(rawreads,sname,jointname))
 	# trim the file based on the quality score
 	trimname = "%s/%s_%s_%s_%s_S%s_trimmed.fastq" %(trimmed,size,sex,treatment,tissue,n)
 	if os.path.exists(trimname):
