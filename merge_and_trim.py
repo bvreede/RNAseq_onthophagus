@@ -7,7 +7,7 @@
 import os,sys
 
 # Establish folders necessary
-rawreads = "/Volumes/HD1v2/dsxRNAseq/barbara/rawreads"
+rawreads = "/Volumes/HD3v2/barbara/dsxphase2b"
 jointreads = "/Volumes/HD3v2/barbara/jointreads"
 trimmed = "/Volumes/HD3v2/barbara/trimmedreads"
 meta = "/Volumes/HD1v2/dsxRNAseq/barbara/meta"
@@ -38,7 +38,7 @@ filenames = {}
 #Go through files and unzip and change names if necessary.
 #This is also used to collect the sample numbers
 for i in os.listdir(rawreads):
-	if i[0] == '.':
+	if i[:3]!='GSF':
 		continue
 	#unzip if necessary
 	if i[-3:] == ".gz":
@@ -72,6 +72,41 @@ for i in os.listdir(rawreads):
 		os.system("mv %s/%s %s/%s" %(rawreads,i,rawreads,newi)) #change the name of the file
 		# apply the new sample number
 		fileno = subfileno
+	"""
+	elif gsf == 'GSF1287': #again there are two numbers in the filename, so this needs to be fixed.
+		#first check if there are indeed two numbers:
+		test = i.split('_S')
+		if len(test) == 2:
+			#subfilenumber has already been replaced.
+			samplenos.append(fileno)
+			filenames[fileno] = i
+			if i.split('.')[-1] != 'fastq':
+				print "File %s is not a fastq file. Please investigate." %i
+			continue
+		elif len(test) == 1:
+			print "File %s does not have a file number. Please investigate." %i
+			continue
+		if len(test) != 3:
+			print "File %s has too many file numbers. Please investigate." %i
+			continue
+		# create a filename so that only one sample ID is written in the filename
+		subfileno = i.split('_S')[2].split('_')[0] 
+		try:
+			int(subfileno)
+		except ValueError: # this means the subfilenumber is not a number, which means the filename has already been changed.
+			samplenos.append(fileno)
+			filenames[fileno] = i
+			if i.split('.')[-1] != 'fastq':
+				print "File %s is not a fastq file. Please investigate." %i
+			continue
+		newi = newi.replace('_S%s_' %fileno,'_S%s_' %subfileno)
+		# put the old and new name in the meta database
+		gsftf.write("%s,%s,%s,%s\n" %(i,newi,fileno,subfileno))
+		print "Changing filename for", i
+		os.system("mv %s/%s %s/%s" %(rawreads,i,rawreads,newi)) #change the name of the file
+		# apply the new sample number
+		fileno = subfileno
+	"""
 	samplenos.append(fileno)
 	filenames[fileno] = i
 	if i.split('.')[-1] != 'fastq':
