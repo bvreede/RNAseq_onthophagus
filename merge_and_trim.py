@@ -78,6 +78,7 @@ for i in os.listdir(rawreads):
 		if len(test) == 2:
 			#subfilenumber has already been replaced.
 			samplenos.append(fileno)
+			print "Appending filenumber %s from file %s." %(fileno,i)
 			filenames[fileno] = i
 			if i.split('.')[-1] != 'fastq':
 				print "File %s is not a fastq file. Please investigate." %i
@@ -116,26 +117,27 @@ for n in samplenos:
 	if 'dsxm' in fname:
 		treatment = "dsx"
 		sex = "male"
-	elif 'dsxf' or 'dsx_female' in fname:
+	elif 'dsxf' in fname or 'dsx_female' in fname:
+		print fname, "contains dsx female"
 		treatment = "dsx"
 		sex = "female"
 	elif 'ctrlm' in fname:
 		treatment = "ctrl"
 		sex = "male"
-	elif 'ctrlf' or 'ctrl_female' in fname:
+	elif 'ctrlf' in fname or 'ctrl_female' in fname:
 		treatment = "ctrl"
 		sex = "female"
 	else:
 		print "Could not determine sex/treatment for file %s (sample S%s)." %(fname,n)
 		continue
 	# determine tissue from filename
-	if '-che' or '_hh_' in fname:
+	if '-che' in fname or '_hh_' in fname:
 		tissue = 'HH'
-	elif '-the' or '_th_'in fname:
+	elif '-the' in fname or '_th_'in fname:
 		tissue = 'TH'
-	elif '-br' or '_brn_' in fname:
+	elif '-br' in fname or '_brn_' in fname:
 		tissue = 'BR'
-	elif '-gen' or '_gen_' in fname:
+	elif '-gen' in fname or '_gen_' in fname:
 		tissue = 'GEN'
 	else:
 		print "Could not determine tissue for file %s (sample S%s)." %(fname,n)
