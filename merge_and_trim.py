@@ -91,13 +91,10 @@ for i in os.listdir(rawreads):
 		# create a filename so that only one sample ID is written in the filename
 		subfileno = i.split('_S')[2].split('_')[0] 
 		newi = i.replace('_S%s_' %subfileno,'_')
-		#newi = newi.replace('_S%s_' %subfileno,'_S%s_' %subfileno)
 		# put the old and new name in the meta database
-		#gsftf.write("%s,%s,%s,%s\n" %(i,newi,fileno,subfileno))
+		gsftf.write("%s,%s,%s,%s\n" %(i,newi,subfileno,fileno))
 		print "Changing filename for", i, "to", newi
-		#os.system("mv %s/%s %s/%s" %(rawreads,i,rawreads,newi)) #change the name of the file
-		# apply the new sample number
-		fileno = subfileno
+		os.system("mv %s/%s %s/%s" %(rawreads,i,rawreads,newi)) #change the name of the file
 	samplenos.append(fileno)
 	filenames[fileno] = i
 	if i.split('.')[-1] != 'fastq':
@@ -107,7 +104,7 @@ gsftf.close()
 #make the sample list unique
 samplenos = list(set(samplenos))
 print "Total raw samples:", len(samplenos)
-"""
+
 #Merge sequence files from the same sample.
 for n in samplenos:
 	# First, a very elaborate sequence of finding the correct name for the cat file
@@ -168,4 +165,3 @@ for n in samplenos:
 	else:
 		print "Trimming reads for sample S%s..." %n	
 		os.system("java -jar ~/bin/Trimmomatic-0.36/trimmomatic-0.36.jar SE -threads 8 -phred33 %s %s ILLUMINACLIP:TruSeq3-SE:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36" %(jointname,trimname))
-"""
