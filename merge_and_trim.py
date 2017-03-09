@@ -106,7 +106,7 @@ samplenos = list(set(samplenos))
 print "Total raw samples:", len(samplenos)
 
 #Merge sequence files from the same sample.
-for n in samplenos:
+for n in ['215']:#samplenos:
 	# First, a very elaborate sequence of finding the correct name for the cat file
 	# determine sample name as used in filename
 	sname = "_S%s_" %n
@@ -160,8 +160,8 @@ for n in samplenos:
 		os.system("cat %s/*%s* > %s" %(rawreads,sname,jointname))
 	# trim the file based on the quality score
 	trimname = "%s/%s_%s_%s_%s_S%s_trimmed.fastq" %(trimmed,size,sex,treatment,tissue,n)
-	if os.path.exists(trimname):
-		print "The trimmed read for sample S%s already exists. Continue with next file..." %n
-	else:
-		print "Trimming reads for sample S%s..." %n	
-		os.system("java -jar ~/bin/Trimmomatic-0.36/trimmomatic-0.36.jar SE -threads 8 -phred33 %s %s ILLUMINACLIP:TruSeq3-SE:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36" %(jointname,trimname))
+	#if os.path.exists(trimname):
+	#	print "The trimmed read for sample S%s already exists. Continue with next file..." %n
+	#else:
+	print "Trimming reads for sample S%s..." %n	
+	os.system("java -jar ~/bin/Trimmomatic-0.36/trimmomatic-0.36.jar SE -threads 8 -phred33 %s %s ILLUMINACLIP:TruSeq3-SE:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36" %(jointname,trimname))
