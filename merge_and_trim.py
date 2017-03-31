@@ -7,9 +7,9 @@
 import os,sys
 
 # Establish folders necessary
-rawreads = "/Volumes/HD3v2/barbara/dsxphase2b"
-jointreads = "/Volumes/HD3v2/barbara/jointreads"
-trimmed = "/Volumes/HD3v2/barbara/trimmedreads"
+rawreads = "/Volumes/HD1v2/dsxRNAseq/barbara/rawreads"
+jointreads = "/Volumes/HD1v2/dsxRNAseq/barbara/jointreads"
+trimmed = "/Volumes/HD1v2/dsxRNAseq/barbara/trimmedreads_smallF"
 meta = "/Volumes/HD1v2/dsxRNAseq/barbara/meta"
 
 if not os.path.exists(rawreads):
