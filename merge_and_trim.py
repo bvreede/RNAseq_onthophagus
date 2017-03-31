@@ -78,7 +78,6 @@ for i in os.listdir(rawreads):
 		if len(test) == 2:
 			#subfilenumber has already been replaced.
 			samplenos.append(fileno)
-			print "Appending filenumber %s from file %s." %(fileno,i)
 			filenames[fileno] = i
 			if i.split('.')[-1] != 'fastq':
 				print "File %s is not a fastq file. Please investigate." %i
