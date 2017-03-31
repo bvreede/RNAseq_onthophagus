@@ -117,7 +117,6 @@ for n in samplenos:
 		treatment = "dsx"
 		sex = "male"
 	elif 'dsxf' in fname or 'dsx_female' in fname:
-		print fname, "contains dsx female"
 		treatment = "dsx"
 		sex = "female"
 	elif 'ctrlm' in fname:
