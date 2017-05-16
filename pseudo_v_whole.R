@@ -161,3 +161,5 @@ dmb.ps <- results(dds.sv.ps, contrast=c("group","largemaledsxBR","smallmaledsxBR
 dfb.ps <- results(dds.sv.ps, contrast=c("group","largefemaledsxBR","smallfemaledsxBR"))
 
 save.image(file="/Volumes/HD1v2/dsxRNAseq/barbara/onthophagus/sv_v_pseudo.RData")
+
+
