@@ -1,7 +1,9 @@
-load(dds.sv, file="/Users/BarbaraMaria/Dropbox/projects/2016_dsx-phase2/dds_sv_20170515.rda")
-load(dds.sv.ps, file="/Users/BarbaraMaria/Dropbox/projects/2016_dsx-phase2/dds_svps_20170515.rda")
+library(DESeq2)
 
-# dsx
+load("/Volumes/HD1v2/dsxRNAseq/barbara/onthophagus/dds_sv_20170515.rda")
+load("/Volumes/HD1v2/dsxRNAseq/barbara/onthophagus/dds_svps_20170515.rda")
+
+# dsx mediated - whole
 # headhorns
 lmh.sv <- results(dds.sv, contrast=c("group","largemalectrlHH","largemaledsxHH"))
 smh.sv <- results(dds.sv, contrast=c("group","smallmalectrlHH","smallmaledsxHH"))
@@ -25,30 +27,9 @@ lmb.sv <- results(dds.sv, contrast=c("group","largemalectrlBR","largemaledsxBR")
 smb.sv <- results(dds.sv, contrast=c("group","smallmalectrlBR","smallmaledsxBR"))
 lfb.sv <- results(dds.sv, contrast=c("group","largefemalectrlBR","largefemaledsxBR"))
 sfb.sv <- results(dds.sv, contrast=c("group","smallfemalectrlBR","smallfemaledsxBR"))
+save.image(file="/Volumes/HD1v2/dsxRNAseq/barbara/onthophagus/sv_v_pseudo.RData")
 
-#headhorns
-lmh.ps <- results(dds.ps, contrast=c("group","largemalectrlHH","largemaledsxHH"))
-smh.ps <- results(dds.ps, contrast=c("group","smallmalectrlHH","smallmaledsxHH"))
-lfh.ps <- results(dds.ps, contrast=c("group","largefemalectrlHH","largefemaledsxHH"))
-sfh.ps <- results(dds.ps, contrast=c("group","smallfemalectrlHH","smallfemaledsxHH"))
 
-#thoracic horns
-lmt.ps <- results(dds.ps, contrast=c("group","largemalectrlTH","largemaledsxTH"))
-smt.ps <- results(dds.ps, contrast=c("group","smallmalectrlTH","smallmaledsxTH"))
-lft.ps <- results(dds.ps, contrast=c("group","largefemalectrlTH","largefemaledsxTH"))
-sft.ps <- results(dds.ps, contrast=c("group","smallfemalectrlTH","smallfemaledsxTH"))
-
-#genitalia
-lmg.ps <- results(dds.ps, contrast=c("group","largemalectrlGEN","largemaledsxGEN"))
-smg.ps <- results(dds.ps, contrast=c("group","smallmalectrlGEN","smallmaledsxGEN"))
-lfg.ps <- results(dds.ps, contrast=c("group","largefemalectrlGEN","largefemaledsxGEN"))
-sfg.ps <- results(dds.ps, contrast=c("group","smallfemalectrlGEN","smallfemaledsxGEN"))
-
-#brains
-lmb.ps <- results(dds.ps, contrast=c("group","largemalectrlBR","largemaledsxBR"))
-smb.ps <- results(dds.ps, contrast=c("group","smallmalectrlBR","smallmaledsxBR"))
-lfb.ps <- results(dds.ps, contrast=c("group","largefemalectrlBR","largefemaledsxBR"))
-sfb.ps <- results(dds.ps, contrast=c("group","smallfemalectrlBR","smallfemaledsxBR"))
 
 # sex bias
 # headhorns
@@ -74,30 +55,60 @@ lcb.sv <- results(dds.sv, contrast=c("group","largefemalectrlBR","largemalectrlB
 scb.sv <- results(dds.sv, contrast=c("group","smallfemalectrlBR","smallmalectrlBR"))
 ldb.sv <- results(dds.sv, contrast=c("group","largefemaledsxBR","largemaledsxBR"))
 sdb.sv <- results(dds.sv, contrast=c("group","smallfemaledsxBR","smallmaledsxBR"))
+save.image(file="/Volumes/HD1v2/dsxRNAseq/barbara/onthophagus/sv_v_pseudo.RData")
 
+
+# dsx mediated - pseudo
 #headhorns
-lch.ps <- results(dds.ps, contrast=c("group","largefemalectrlHH","largemalectrlHH"))
-sch.ps <- results(dds.ps, contrast=c("group","smallfemalectrlHH","smallmalectrlHH"))
-ldh.ps <- results(dds.ps, contrast=c("group","largefemaledsxHH","largemaledsxHH"))
-sdh.ps <- results(dds.ps, contrast=c("group","smallfemaledsxHH","smallmaledsxHH"))
+lmh.ps <- results(dds.sv.ps, contrast=c("group","largemalectrlHH","largemaledsxHH"))
+smh.ps <- results(dds.sv.ps, contrast=c("group","smallmalectrlHH","smallmaledsxHH"))
+lfh.ps <- results(dds.sv.ps, contrast=c("group","largefemalectrlHH","largefemaledsxHH"))
+sfh.ps <- results(dds.sv.ps, contrast=c("group","smallfemalectrlHH","smallfemaledsxHH"))
 
 #thoracic horns
-lct.ps <- results(dds.ps, contrast=c("group","largefemalectrlTH","largemalectrlTH"))
-sct.ps <- results(dds.ps, contrast=c("group","smallfemalectrlTH","smallmalectrlTH"))
-ldt.ps <- results(dds.ps, contrast=c("group","largefemaledsxTH","largemaledsxTH"))
-sdt.ps <- results(dds.ps, contrast=c("group","smallfemaledsxTH","smallmaledsxTH"))
+lmt.ps <- results(dds.sv.ps, contrast=c("group","largemalectrlTH","largemaledsxTH"))
+smt.ps <- results(dds.sv.ps, contrast=c("group","smallmalectrlTH","smallmaledsxTH"))
+lft.ps <- results(dds.sv.ps, contrast=c("group","largefemalectrlTH","largefemaledsxTH"))
+sft.ps <- results(dds.sv.ps, contrast=c("group","smallfemalectrlTH","smallfemaledsxTH"))
 
 #genitalia
-lcg.ps <- results(dds.ps, contrast=c("group","largefemalectrlGEN","largemalectrlGEN"))
-scg.ps <- results(dds.ps, contrast=c("group","smallfemalectrlGEN","smallmalectrlGEN"))
-ldg.ps <- results(dds.ps, contrast=c("group","largefemaledsxGEN","largemaledsxGEN"))
-sdg.ps <- results(dds.ps, contrast=c("group","smallfemaledsxGEN","smallmaledsxGEN"))
+lmg.ps <- results(dds.sv.ps, contrast=c("group","largemalectrlGEN","largemaledsxGEN"))
+smg.ps <- results(dds.sv.ps, contrast=c("group","smallmalectrlGEN","smallmaledsxGEN"))
+lfg.ps <- results(dds.sv.ps, contrast=c("group","largefemalectrlGEN","largefemaledsxGEN"))
+sfg.ps <- results(dds.sv.ps, contrast=c("group","smallfemalectrlGEN","smallfemaledsxGEN"))
 
 #brains
-lcb.ps <- results(dds.ps, contrast=c("group","largefemalectrlBR","largemalectrlBR"))
-scb.ps <- results(dds.ps, contrast=c("group","smallfemalectrlBR","smallmalectrlBR"))
-ldb.ps <- results(dds.ps, contrast=c("group","largefemaledsxBR","largemaledsxBR"))
-sdb.ps <- results(dds.ps, contrast=c("group","smallfemaledsxBR","smallmaledsxBR"))
+lmb.ps <- results(dds.sv.ps, contrast=c("group","largemalectrlBR","largemaledsxBR"))
+smb.ps <- results(dds.sv.ps, contrast=c("group","smallmalectrlBR","smallmaledsxBR"))
+lfb.ps <- results(dds.sv.ps, contrast=c("group","largefemalectrlBR","largefemaledsxBR"))
+sfb.ps <- results(dds.sv.ps, contrast=c("group","smallfemalectrlBR","smallfemaledsxBR"))
+save.image(file="/Volumes/HD1v2/dsxRNAseq/barbara/onthophagus/sv_v_pseudo.RData")
+
+# sex bias - pseudo
+#headhorns
+lch.ps <- results(dds.sv.ps, contrast=c("group","largefemalectrlHH","largemalectrlHH"))
+sch.ps <- results(dds.sv.ps, contrast=c("group","smallfemalectrlHH","smallmalectrlHH"))
+ldh.ps <- results(dds.sv.ps, contrast=c("group","largefemaledsxHH","largemaledsxHH"))
+sdh.ps <- results(dds.sv.ps, contrast=c("group","smallfemaledsxHH","smallmaledsxHH"))
+
+#thoracic horns
+lct.ps <- results(dds.sv.ps, contrast=c("group","largefemalectrlTH","largemalectrlTH"))
+sct.ps <- results(dds.sv.ps, contrast=c("group","smallfemalectrlTH","smallmalectrlTH"))
+ldt.ps <- results(dds.sv.ps, contrast=c("group","largefemaledsxTH","largemaledsxTH"))
+sdt.ps <- results(dds.sv.ps, contrast=c("group","smallfemaledsxTH","smallmaledsxTH"))
+
+#genitalia
+lcg.ps <- results(dds.sv.ps, contrast=c("group","largefemalectrlGEN","largemalectrlGEN"))
+scg.ps <- results(dds.sv.ps, contrast=c("group","smallfemalectrlGEN","smallmalectrlGEN"))
+ldg.ps <- results(dds.sv.ps, contrast=c("group","largefemaledsxGEN","largemaledsxGEN"))
+sdg.ps <- results(dds.sv.ps, contrast=c("group","smallfemaledsxGEN","smallmaledsxGEN"))
+
+#brains
+lcb.ps <- results(dds.sv.ps, contrast=c("group","largefemalectrlBR","largemalectrlBR"))
+scb.ps <- results(dds.sv.ps, contrast=c("group","smallfemalectrlBR","smallmalectrlBR"))
+ldb.ps <- results(dds.sv.ps, contrast=c("group","largefemaledsxBR","largemaledsxBR"))
+sdb.ps <- results(dds.sv.ps, contrast=c("group","smallfemaledsxBR","smallmaledsxBR"))
+save.image(file="/Volumes/HD1v2/dsxRNAseq/barbara/onthophagus/sv_v_pseudo.RData")
 
 # nutrition
 # headhorns
@@ -123,29 +134,30 @@ cmb.sv <- results(dds.sv, contrast=c("group","largemalectrlBR","smallmalectrlBR"
 cfb.sv <- results(dds.sv, contrast=c("group","largefemalectrlBR","smallfemalectrlBR"))
 dmb.sv <- results(dds.sv, contrast=c("group","largemaledsxBR","smallmaledsxBR"))
 dfb.sv <- results(dds.sv, contrast=c("group","largefemaledsxBR","smallfemaledsxBR"))
+save.image(file="/Volumes/HD1v2/dsxRNAseq/barbara/onthophagus/sv_v_pseudo.RData")
 
 #headhorns
-cmh.ps <- results(dds.ps, contrast=c("group","largemalectrlHH","smallmalectrlHH"))
-cfh.ps <- results(dds.ps, contrast=c("group","largefemalectrlHH","smallfemalectrlHH"))
-dmh.ps <- results(dds.ps, contrast=c("group","largemaledsxHH","smallmaledsxHH"))
-dfh.ps <- results(dds.ps, contrast=c("group","largefemaledsxHH","smallfemaledsxHH"))
+cmh.ps <- results(dds.sv.ps, contrast=c("group","largemalectrlHH","smallmalectrlHH"))
+cfh.ps <- results(dds.sv.ps, contrast=c("group","largefemalectrlHH","smallfemalectrlHH"))
+dmh.ps <- results(dds.sv.ps, contrast=c("group","largemaledsxHH","smallmaledsxHH"))
+dfh.ps <- results(dds.sv.ps, contrast=c("group","largefemaledsxHH","smallfemaledsxHH"))
 
 #thoracic horns
-cmt.ps <- results(dds.ps, contrast=c("group","largemalectrlTH","smallmalectrlTH"))
-cft.ps <- results(dds.ps, contrast=c("group","largefemalectrlTH","smallfemalectrlTH"))
-dmt.ps <- results(dds.ps, contrast=c("group","largemaledsxTH","smallmaledsxTH"))
-dft.ps <- results(dds.ps, contrast=c("group","largefemaledsxTH","smallfemaledsxTH"))
+cmt.ps <- results(dds.sv.ps, contrast=c("group","largemalectrlTH","smallmalectrlTH"))
+cft.ps <- results(dds.sv.ps, contrast=c("group","largefemalectrlTH","smallfemalectrlTH"))
+dmt.ps <- results(dds.sv.ps, contrast=c("group","largemaledsxTH","smallmaledsxTH"))
+dft.ps <- results(dds.sv.ps, contrast=c("group","largefemaledsxTH","smallfemaledsxTH"))
 
 #genitalia
-cmg.ps <- results(dds.ps, contrast=c("group","largemalectrlGEN","smallmalectrlGEN"))
-cfg.ps <- results(dds.ps, contrast=c("group","largefemalectrlGEN","smallfemalectrlGEN"))
-dmg.ps <- results(dds.ps, contrast=c("group","largemaledsxGEN","smallmaledsxGEN"))
-dfg.ps <- results(dds.ps, contrast=c("group","largefemaledsxGEN","smallfemaledsxGEN"))
+cmg.ps <- results(dds.sv.ps, contrast=c("group","largemalectrlGEN","smallmalectrlGEN"))
+cfg.ps <- results(dds.sv.ps, contrast=c("group","largefemalectrlGEN","smallfemalectrlGEN"))
+dmg.ps <- results(dds.sv.ps, contrast=c("group","largemaledsxGEN","smallmaledsxGEN"))
+dfg.ps <- results(dds.sv.ps, contrast=c("group","largefemaledsxGEN","smallfemaledsxGEN"))
 
 #brains
-cmb.ps <- results(dds.ps, contrast=c("group","largemalectrlBR","smallmalectrlBR"))
-cfb.ps <- results(dds.ps, contrast=c("group","largefemalectrlBR","smallfemalectrlBR"))
-dmb.ps <- results(dds.ps, contrast=c("group","largemaledsxBR","smallmaledsxBR"))
-dfb.ps <- results(dds.ps, contrast=c("group","largefemaledsxBR","smallfemaledsxBR"))
+cmb.ps <- results(dds.sv.ps, contrast=c("group","largemalectrlBR","smallmalectrlBR"))
+cfb.ps <- results(dds.sv.ps, contrast=c("group","largefemalectrlBR","smallfemalectrlBR"))
+dmb.ps <- results(dds.sv.ps, contrast=c("group","largemaledsxBR","smallmaledsxBR"))
+dfb.ps <- results(dds.sv.ps, contrast=c("group","largefemaledsxBR","smallfemaledsxBR"))
 
-save.image(file="/Users/BarbaraMaria/Dropbox/projects/2016_dsx-phase2/sv_v_pseudo.RData")
+save.image(file="/Volumes/HD1v2/dsxRNAseq/barbara/onthophagus/sv_v_pseudo.RData")
